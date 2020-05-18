@@ -1,19 +1,28 @@
 package com.example.demo;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Student {
-	private static int idGenerator = 1;
-	private final int id;
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private Integer id;
+
 	private String firstName;
 	private String lastName;
 	private String dateOfBirth;
-	
-	public Student(String firstName, String lastName, String dateOfBirth) {
-		this.id = idGenerator++;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.dateOfBirth = dateOfBirth;
-	}
 
+	public Integer getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public String getFirstName() {
 		return firstName;
 	}
@@ -36,10 +45,6 @@ public class Student {
 
 	public void setDateOfBirth(String dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
-	}
-
-	public int getId() {
-		return id;
 	}
 	
 	public String toString() {
