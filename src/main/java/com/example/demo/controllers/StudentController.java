@@ -27,8 +27,9 @@ public class StudentController {
 	private StudentService studentService;
 	
 	@GetMapping()
-	public @ResponseBody List<Student> getAllStudents() {
-		return studentService.findAll();
+	public @ResponseBody List<Student> search(
+			@RequestParam(required=false) String search) {
+		return studentService.search(search);
 	}
 	
 	@GetMapping("/{id}")
@@ -38,13 +39,6 @@ public class StudentController {
 			return new ResponseEntity<Object>(null, HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Object>(student.get(), HttpStatus.OK);
-	}
-	
-	/* return students who have the searched word in their first name or last name */
-	@GetMapping("/byName")
-	public @ResponseBody Iterable<Student> getStudentByName(
-			@RequestParam String search) {
-		return studentService.findByFirstNameOrLastName(search);
 	}
 	
 	@PostMapping()

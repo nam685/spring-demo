@@ -1,9 +1,13 @@
 package com.example.demo.entities;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 public class Student {
@@ -13,7 +17,9 @@ public class Student {
 
 	private String firstName;
 	private String lastName;
-	private String dateOfBirth;
+	
+	@JsonFormat(pattern="dd/MM/yyyy")
+	private Date dateOfBirth;
 
 	public Integer getId() {
 		return id;
@@ -39,11 +45,11 @@ public class Student {
 		this.lastName = lastName;
 	}
 
-	public String getDateOfBirth() {
+	public Date getDateOfBirth() {
 		return dateOfBirth;
 	}
 
-	public void setDateOfBirth(String dateOfBirth) {
+	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
 	
