@@ -16,42 +16,44 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.example.demo.business.StudentService;
-import com.example.demo.entities.Student;
+import com.example.demo.business.UserService;
+import com.example.demo.entities.User;
 
 @Controller
-@RequestMapping("/student")
-public class StudentController {
+@RequestMapping("/user")
+public class UserController {
 	
 	@Autowired
-	private StudentService studentService;
+	private UserService userService;
 	
 	@GetMapping()
-	public @ResponseBody List<Student> search(
-			@RequestParam(required=false) String search) {
-		return studentService.search(search);
+	public @ResponseBody List<User> find(
+			@RequestParam String criteria) {
+		return criteria.equalsIgnoreCase("birthday") ? userService.findBirthdayBois() : userService.findAll();
 	}
 	
 	@GetMapping("/{id}")
-	public @ResponseBody ResponseEntity<Object> getStudentByID(@PathVariable("id") int id) {
-		Optional<Student> student = studentService.findById(id);
-		if (student.isEmpty()) {
+	public @ResponseBody ResponseEntity<Object> findByID(@PathVariable("id") int id) {
+		Optional<User> user = userService.findById(id);
+		if (user.isEmpty()) {
 			return new ResponseEntity<Object>(null, HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<Object>(student.get(), HttpStatus.OK);
+		return new ResponseEntity<Object>(user.get(), HttpStatus.OK);
 	}
 	
 	@PostMapping()
-	public @ResponseBody Student addStudent(@RequestBody Student param) {
-		return studentService.add(param);
+	public @ResponseBody User add(@RequestBody User param) {
+		return userService.add(param);
 	}
 	
 	@PutMapping()
-	public @ResponseBody ResponseEntity<Object> updateStudent(@RequestBody Student param) {
-		Optional<Student> student = studentService.update(param);
-		if (student.isEmpty()) {
+	public @ResponseBody ResponseEntity<Object> update(@RequestBody User param) {
+		Optional<User> user = userService.update(param);
+		if (user.isEmpty()) {
 			return new ResponseEntity<Object>(null, HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<Object>(student, HttpStatus.OK);
+		return new ResponseEntity<Object>(user, HttpStatus.OK);
 	}
+	
+	
 }
