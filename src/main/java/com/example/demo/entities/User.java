@@ -1,41 +1,72 @@
 package com.example.demo.entities;
 
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Email;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
+@Table(	name="user",
+		uniqueConstraints = {
+			@UniqueConstraint(columnNames = {"username","email"})
+		})
 public class User {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Integer id;
+	private Long id;
 
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false, unique = true, length = 20)
 	private String username;
+
+	@Email
+	@Column(nullable = false, unique = true, length = 50)
+	private String email;
 	
-	@Column
+	@Column(nullable = false, length = 120)
 	private String password;
 	
-	@Column
-	@JsonFormat(pattern="dd/MM/yyyy")
+	@JsonFormat(pattern="yyyy-MM-dd")
 	private Date dateOfBirth;
 	
-	@Column
-	private List<String> authorities;
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(
+			name = "user_role",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "role_id")
+			)
+	private Set<Role> roles = new HashSet<>();
+	
+	public User(String username, @Email String email, Date dateOfBirth, String password) {
+		super();
+		this.username = username;
+		this.email = email;
+		this.password = password;
+		this.dateOfBirth = dateOfBirth;
+	}
 
-	public Integer getId() {
+	public User() {
+	}
+
+	public Long getId() {
 		return id;
 	}
 	
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -62,12 +93,20 @@ public class User {
 	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
-	
-	public List<String> getAuthorities() {
-		return authorities;
+
+	public String getEmail() {
+		return email;
 	}
 
-	public void setAuthorities(List<String> authorities) {
-		this.authorities = authorities;
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
 	}
 }

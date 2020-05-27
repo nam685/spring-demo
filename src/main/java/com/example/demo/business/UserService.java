@@ -20,7 +20,7 @@ public class UserService {
 		return (List<User>) userRepository.findAll();
 	}
 	
-	public Optional<User> findById (int id) {
+	public Optional<User> findById (long id) {
 		return userRepository.findById(id);
 	}
 	
@@ -28,6 +28,7 @@ public class UserService {
 		User user = new User();
 		BeanUtils.copyProperties(param, user, "id");
 		userRepository.save(user);
+		
 		return user;
 	}
 	
@@ -44,6 +45,6 @@ public class UserService {
 	}
 	
 	public List<User> findBirthdayBois() {
-		return (List<User>) userRepository.findBirthdayBois();
+		return userRepository.findBirthdayBois();
 	}
 }

@@ -6,7 +6,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,8 +21,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.demo.business.UserService;
 import com.example.demo.entities.User;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @Controller
 @RequestMapping("/user")
+@PreAuthorize("hasRole('ADMIN')")
 public class UserController {
 	
 	@Autowired
@@ -28,8 +32,15 @@ public class UserController {
 	
 	@GetMapping()
 	public @ResponseBody List<User> find(
-			@RequestParam String criteria) {
-		return criteria.equalsIgnoreCase("birthday") ? userService.findBirthdayBois() : userService.findAll();
+			@RequestParam(required=false) String criteria) {
+		if (criteria == null) {
+			return userService.findAll();
+		}
+		if (criteria.equalsIgnoreCase("birthday")) {
+			return userService.findBirthdayBois();
+		}
+		// default
+		return userService.findAll();
 	}
 	
 	@GetMapping("/{id}")
@@ -54,6 +65,5 @@ public class UserController {
 		}
 		return new ResponseEntity<Object>(user, HttpStatus.OK);
 	}
-	
 	
 }
