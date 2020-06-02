@@ -20,5 +20,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	
 	@Query("SELECT u FROM User u WHERE MONTH(CURRENT_DATE) = MONTH(u.dateOfBirth) AND DAY(CURRENT_DATE) = DAY(u.dateOfBirth)")
 	List<User> findBirthdayBois();
-
 }
