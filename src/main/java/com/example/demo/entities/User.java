@@ -51,6 +51,14 @@ public class User {
 			)
 	private Set<Role> roles = new HashSet<>();
 	
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(
+			name = "watch",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "showtimes_id")
+			)
+	private Set<Showtime> watchHistory = new HashSet<>();
+	
 	public User(String username, @Email String email, Date dateOfBirth, String password) {
 		super();
 		this.username = username;
@@ -109,4 +117,14 @@ public class User {
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
+
+	public Set<Showtime> getWatchHistory() {
+		return watchHistory;
+	}
+
+	public void setWatchHistory(Set<Showtime> watchHistory) {
+		this.watchHistory = watchHistory;
+	}
+	
+	
 }
